@@ -1,14 +1,5 @@
 from django.db import models
-from django.db.models.signals import m2m_changed
-from django.dispatch import receiver
-
-
-class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
+from common.models import BaseModel
 
 
 class Ingredient(BaseModel):
@@ -25,6 +16,12 @@ class Recipe(BaseModel):
         for i in self.ingredients.all():
             self.kcal += i.kcal
         self.save()
+
+
+class RecipeProxy(Recipe):
+
+    class Meta:
+        proxy = True
 
 
 class RecipeIngredient(BaseModel):
